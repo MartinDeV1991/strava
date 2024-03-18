@@ -1,4 +1,5 @@
 import React from 'react';
+import Button from 'react-bootstrap/Button';
 
 const LoadData = ({ accessToken, setActivities }) => {
     function logData(arg) {
@@ -22,8 +23,8 @@ const LoadData = ({ accessToken, setActivities }) => {
         if (accessToken === undefined) {
             token = localStorage.getItem('Strava_access_token');
         }
-        console.log("Requesting your activities: ...")
         let allActivities = [];
+        console.log(token)
         function fetchActivities(page) {
             logData({ page })
             fetch(`https://www.strava.com/api/v3/athlete/activities?page=${page}`, {
@@ -50,10 +51,9 @@ const LoadData = ({ accessToken, setActivities }) => {
     }
 
     return (
-        <div>
-            <div>Hello World</div>
-            <button id="fetchActivitiesBtn" onClick={() => getActivities(true)}>Get Activities From API</button>
-            <button id="loadActivitiesBtn" onClick={getActivitiesFromLocalStorage}>Get Activities From LocalStorage</button>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+            <Button id="fetchActivitiesBtn" style={{ margin: '10px 10px' }} onClick={() => getActivities(true)}>Get Activities From API</Button>
+            <Button id="loadActivitiesBtn" style={{ margin: '10px 10px' }}  onClick={getActivitiesFromLocalStorage}>Get Activities From LocalStorage</Button>
         </div>
     );
 };

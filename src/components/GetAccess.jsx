@@ -1,3 +1,6 @@
+
+import Button from 'react-bootstrap/Button';
+
 const GetAccess = ({setAccessToken}) => {
     function logData(arg) {
         let argName = Object.keys(arg)[0];
@@ -45,9 +48,9 @@ const GetAccess = ({setAccessToken}) => {
     }
 
     return (
-        <div>
-            <button id="authorizeBtn" onClick={authorizeStrava}>Authorize Strava</button>
-            <button id="exchangeBtn" onClick={() => exchangeCodeForToken(extractCodeFromUrl())}>Exchange code for token</button>
+        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <Button id="authorizeBtn" style={{ margin: '10px 10px' }} onClick={authorizeStrava}>Authorize Strava</Button>
+            <Button id="exchangeBtn" style={{ margin: '10px 10px' }} onClick={() => exchangeCodeForToken(extractCodeFromUrl())}>Exchange code for token</Button>
         </div>
     );
 };

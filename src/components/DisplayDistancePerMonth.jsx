@@ -1,9 +1,12 @@
 import React from 'react';
+import Button from 'react-bootstrap/Button';
 
-const DisplayDistancePerMonth = ({ activities, setDistancePerMonth }) => {
+const DisplayDistancePerMonth = ({ activities, setDistancePerMonth, setSpeedPerMonth }) => {
 
     function calculateDistancePerMonth() {
         const distancePerMonth = {};
+        const timePerMonth = {};
+        const speedPerMonth = {};
 
         activities.forEach(activity => {
             if (activity.type === "Run") {
@@ -16,15 +19,22 @@ const DisplayDistancePerMonth = ({ activities, setDistancePerMonth }) => {
                 if (!distancePerMonth[key]) {
                     distancePerMonth[key] = 0;
                 }
-
                 distancePerMonth[key] += activity.distance;
+
+                if (!timePerMonth[key]) {
+                    timePerMonth[key] = 0;
+                }
+                timePerMonth[key] += activity.moving_time;
             }
         });
 
         for (const key in distancePerMonth) {
+            speedPerMonth[key] = distancePerMonth[key] / timePerMonth[key] * 3.6;
             distancePerMonth[key] = parseFloat((distancePerMonth[key] / 1000).toFixed(2));
         }
+
         setDistancePerMonth(distancePerMonth);
+        setSpeedPerMonth(speedPerMonth);
         return distancePerMonth;
     }
 
@@ -40,7 +50,7 @@ const DisplayDistancePerMonth = ({ activities, setDistancePerMonth }) => {
 
     return (
         <div>
-            <button id="distancePerMonthBtn" onClick={display}>Distance Per Month</button>
+            <Button id="distancePerMonthBtn" style={{ margin: '10px 10px' }} onClick={display}>Distance Per Month</Button>
             <div id="distancePerMonth"></div>
         </div>
     );

@@ -4,7 +4,7 @@ import Chart from "chart.js/auto";
 import { CategoryScale } from "chart.js";
 Chart.register(CategoryScale);
 
-const DistanceChart = ({ distancePerMonth }) => {
+const SpeedChart = ({ speedPerMonth }) => {
 
     const [startDate, setStartDate] = useState('2000-01');
     const [endDate, setEndDate] = useState('2100-12');
@@ -13,28 +13,28 @@ const DistanceChart = ({ distancePerMonth }) => {
         labels: [],
         datasets: [
             {
-                label: 'Distance per Month (km)',
+                label: 'speed per Month (km)',
                 data: [],
             },
         ],
     });
 
     useEffect(() => {
-        let distance = distancePerMonth;
-        if (distance === undefined) distance = [];
+        let speed = speedPerMonth;
+        if (speed === undefined) speed = [];
 
-        distance = Object.keys(distance).reduce((obj, key) => {
+        speed = Object.keys(speed).reduce((obj, key) => {
             const [year, month] = key.split('-');
             const paddedMonth = month.length === 1 ? '0' + month : month;
             const paddedKey = year + '-' + paddedMonth;
-            obj[paddedKey] = distance[key];
+            obj[paddedKey] = speed[key];
             return obj;
         }, {});
 
-        const filteredData = Object.keys(distance)
+        const filteredData = Object.keys(speed)
             .filter(date => (date >= startDate) && (date <= endDate))
             .reduce((obj, key) => {
-                obj[key] = distance[key];
+                obj[key] = speed[key];
                 return obj;
             }, {});
 
@@ -51,7 +51,7 @@ const DistanceChart = ({ distancePerMonth }) => {
             labels: labels,
             datasets: [
                 {
-                    label: 'Distance per Month (km)',
+                    label: 'speed per Month (km)',
                     data: data,
                     backgroundColor: 'rgba(54, 162, 235, 0.2)',
                     borderColor: 'rgba(54, 162, 235, 1)',
@@ -60,7 +60,7 @@ const DistanceChart = ({ distancePerMonth }) => {
             ],
         });
 
-    }, [distancePerMonth, startDate, endDate]);
+    }, [speedPerMonth, startDate, endDate]);
 
     const handleStartDateChange = (event) => {
         const selectedDate = event.target.value.slice(0, 7);
@@ -87,10 +87,10 @@ const DistanceChart = ({ distancePerMonth }) => {
                 <input type="month" value={endDate} onChange={handleEndDateChange} />
             </div>
             <div style={{ width: '1000px', height: '300px' }}>
-                <Bar data={chartData} options={chartOptions} id="distanceChart"></Bar>
+                <Bar data={chartData} options={chartOptions} id="speedChart"></Bar>
             </div>
         </div>
     );
 };
 
-export default DistanceChart;
+export default SpeedChart;

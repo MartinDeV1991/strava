@@ -1,4 +1,5 @@
 import React from 'react';
+import Button from 'react-bootstrap/Button';
 
 const DisplayActivities = ({ activities }) => {
 
@@ -28,8 +29,12 @@ const DisplayActivities = ({ activities }) => {
     return (
         <div>
             <h1>Strava Activities</h1>
-            <button id="displayActivities" onClick={displayActivities}>Display Activities</button>
-            <div id="activities" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', paddingLeft: 100+'px' }}></div>
+            <Button variant="primary" id="displayActivities" style={{
+                margin: '10px 10px',
+                position: 'absolute',
+                top: '0',
+            }} onClick={displayActivities}>Display Activities</Button>
+            <div id="activities" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', paddingLeft: 100 + 'px' }}></div>
         </div>
     );
 };
