@@ -3,20 +3,22 @@ import React, { useEffect, useState } from 'react';
 import { MapContainer, TileLayer, Polyline } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 
-const Map = ({ polyline, activity }) => {
+const Map = ({ activity }) => {
     const [coordinates, setCoordinates] = useState([]);
     const [centerLat, setCenterLat] = useState(null);
     const [centerLng, setCenterLng] = useState(null);
     const [activityName, setActivityName] = useState("loop");
+    const [activityDate, setActivityDate] = useState("date");
 
     useEffect(() => {
-        if (!polyline) return;
-        const decodedCoordinates = decodePolyline(polyline);
+        if (!activity && !activity.polyline) return;
+        const decodedCoordinates = decodePolyline(activity.polyline);
         setCoordinates(decodedCoordinates);
         if (activity !== undefined) {
-            setActivityName(activity.name)
+            setActivityName(activity.name);
+            setActivityDate(activity.date);
         }
-    }, [polyline]);
+    }, [activity.polyline]);
 
     useEffect(() => {
         if (coordinates.length === 0) return;
@@ -71,7 +73,7 @@ const Map = ({ polyline, activity }) => {
 
     return (
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <div>{activityName}</div>
+            {/* <div>{activityName} {activityDate.slice(0,10)}</div> */}
             {centerLat !== null && centerLng !== null && (
 
                 <MapContainer

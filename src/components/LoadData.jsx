@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 
 const LoadData = ({ accessToken, setActivities }) => {
+
     function logData(arg) {
         let argName = Object.keys(arg)[0];
         let string = `"${argName}":`;
@@ -53,7 +54,7 @@ const LoadData = ({ accessToken, setActivities }) => {
     return (
         <div style={{ display: 'flex', alignItems: 'center' }}>
             <Button id="fetchActivitiesBtn" style={{ margin: '10px 10px' }} onClick={() => getActivities(true)}>Get Activities From API</Button>
-            <Button id="loadActivitiesBtn" style={{ margin: '10px 10px' }}  onClick={getActivitiesFromLocalStorage}>Get Activities From LocalStorage</Button>
+            <Button id="loadActivitiesBtn" style={{ margin: '10px 10px' }} onClick={getActivitiesFromLocalStorage}>Get Activities From LocalStorage</Button>
         </div>
     );
 };

@@ -15,8 +15,6 @@ const HomePage = () => {
     const [distancePerMonth, setDistancePerMonth] = useState();
     const [speedPerMonth, setSpeedPerMonth] = useState();
 
-    const [polylineString, setPolyLineString] = useState("mhm}HiejZ?YKUK[AUQm@Gk@GKE][mACYQm@Cm@KSFk@FWFILBJJBECQU_@MGK?MFMLEBUXIBm@z@Y~@]n@CF@LEHAHM\\ATQXALMNUb@EPGAQVEPEFGZ_@v@a@\\i@NCDI@SXKDk@r@CFCNE@ELE@IZ[^EBEEQSGQIEUDKGc@La@|@EL?JINQVIBEAAFIOGACCQ[MIIAGJCVIJCN[t@MLKREBGTb@^DDDVTZd@^V\\@JHJHTLRd@b@@JLTPNBNJRPHNXb@VNLJPBHHFJLVh@h@n@N`@XLHb@HV?HT\\Nb@JLP\\Vt@^f@LDHKF[Xi@?OX[FQFMJKFQLs@HID[BIDABSLQBi@Zo@Bg@HGAQ?GTODa@V}@?GHIF?TTL@@DDGJQ?WvBqE}BhFIBANE@ENKBKCKKKGKJqAvEAJIHINOr@KPK`@Yn@AHMZAJM\\KL]~@KHEASi@QUQq@U[Se@GE[s@S]IWCCAIECAKSW?KQUIOIEK[EEKSMKUYMAGOKMGCEIGCKQWQI[q@q@GO[a@Ka@GACIKMIAKWAI_@[CKECQUAU@SJOHELYPQFWDGFABG@SAQS[GSGGEKU_@GSMK?OES_@i@Cc@PWF@R?REBGFEJSL]?MBKDEDA@IFABIJ}@LKHMJ[NUP]BUDCF@TkA`@}@HS@MNY@KDEV_APQH[LMT_AD[LQ@KRS?MFMH]Za@Ns@AMHGVo@HKLEJMPKDADI^@HID?DCTFTCD@DDLID?F@FCF@DIF@DADBFEJ@NCJ@ZOF@ZER?LMRIZARIHALGVA^KDG`@GTCLEL@DCD?JMRG`@EVMBEZK@CHADGFEJ?DGNC\\ODEF?JOD?HKJCL^LRERq@`AMXE?_@r@SVSh@KHERGBAJKJG@Mf@I?GFAFML]p@KH[n@KHS\\Y`@E@IPGBKJS\\I\\OZMJKLCHMTSNMj@Cn@D^A\\J^FHCLJh@Bn@DF@LHXFb@DHBPFDLr@`@|@Eb@D^ATBT@j@YlAIFAFEFCD@JSh@I~@Sp@AZCJAZQn@KVC~@Kp@J^LBLRNFBHF?");
-
     const [selectedActivity, setSelectedActivity] = useState(null);
     const [activitiesWithOptions, setActivitiesWithOptions] = useState([]);
 
@@ -26,29 +24,22 @@ const HomePage = () => {
 
     useEffect(() => {
         if (activities !== undefined) {
-
             const filteredActivities = activities.filter(activity => activity.map && activity.map.summary_polyline)
                 .map((activity, index) => ({
                     id: activity.id,
+                    date: activity.start_date_local,
                     name: activity.name,
-                    summary_polyline: activity.map.summary_polyline,
+                    polyline: activity.map.summary_polyline,
                     key: index
                 }));
             setActivitiesWithOptions(filteredActivities);
         }
     }, [activities]);
 
-    useEffect(() => {
-        if (activitiesWithOptions.length > 0) {
-            setPolyLineString(activitiesWithOptions[selectedActivity].summary_polyline);
-            console.log(activitiesWithOptions[selectedActivity])
-        }
-    }, [selectedActivity]);
-
     return (
         <div>
             <GetAccess setAccessToken={setAccessToken}></GetAccess>
-            <LoadData accessToken={accessToken} setActivities={setActivities}></LoadData>
+            <LoadData accessToken={accessToken} setActivities={setActivities} activities={activities}></LoadData>
 
             <label>Select Activity:</label>
             <select value={selectedActivity || ""} onChange={handleActivityChange}>
@@ -60,7 +51,14 @@ const HomePage = () => {
                 ))}
             </select>
 
-            <Map polyline={polylineString} activity={activitiesWithOptions[selectedActivity]}></Map>
+            {[...Array(5)].map((_, i) => {
+                const activityIndex = +selectedActivity + i;
+                return activitiesWithOptions[activityIndex] ? (
+                    <Map key={i} activity={activitiesWithOptions[activityIndex]} />
+                ) : null;
+            })}
+
+
             <DistanceChart distancePerMonth={distancePerMonth}></DistanceChart>
             <SpeedChart speedPerMonth={speedPerMonth}></SpeedChart>
             <DisplayActivities activities={activities}></DisplayActivities>
