@@ -46,18 +46,22 @@ const VelocityGraph = ({ activityId }) => {
         });
     }, [velocitySmoothData, timestamps]);
 
-    function getStreams() {
-        const accessToken = '923e2c2bf2169e3d036fb2220ac5ffbebc13dd33';
+    async function getStreams() {
+        const accessToken = '3583b8c97f1bf1df5f4e5c928701d78e26a6cc9f';
         const streamTypes = 'time,velocity_smooth';
 
-        const cachedStreams = JSON.parse(localStorage.getItem('stravaStreams')) || {};
-
-        if (cachedStreams[activityId]) {
-            const { timestamps, velocitySmoothData } = cachedStreams[activityId];
-            setTimestamps(timestamps);
-            setVelocitySmoothData(velocitySmoothData);
-            console.log("getting activity ", activityId, " from localstorage");
-            console.log(cachedStreams)
+        // activityId = '10178504681'
+        // const cachedStreams = JSON.parse(localStorage.getItem('stravaStreams')) || {};
+        const cachedStreams = await fetch(`/mongodb/api/findone/${activityId}`);
+        let responseData;
+        if (cachedStreams.status === 404) {
+            console.log("not found")
+        } else {
+            responseData = await cachedStreams.json();
+            setTimestamps(responseData.timestamps);
+            setVelocitySmoothData(responseData.velocitySmoothData);
+            console.log("De stream in van activiteit ", activityId, ": ", responseData)
+            console.log("returning...")
             return;
         }
 
@@ -75,7 +79,18 @@ const VelocityGraph = ({ activityId }) => {
                     setTimestamps(timeStream.data);
                     setVelocitySmoothData(velocitySmoothStream.data);
                     cachedStreams[activityId] = { timestamps: timeStream.data, velocitySmoothData: velocitySmoothStream.data };
-                    localStorage.setItem('stravaStreams', JSON.stringify(cachedStreams));
+
+                    fetch(`/mongodb/api/post/${activityId}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(cachedStreams[activityId])
+                    })
+                        .then(
+                            console.log("posted data")
+                        );
+
                 }
                 console.log("getting activity ", activityId, " from API");
             })
