@@ -1,10 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import LoadData from "../components/LoadData";
 import CalculateDistancePerMonth from "../components/CalculateDistancePerMonth";
 import DistanceChart from "../components/DistanceChart";
 import SpeedChart from "../components/SpeedChart";
-import Map from "../components/Map";
-import Button from 'react-bootstrap/Button';
 
 const OverviewPage = () => {
 

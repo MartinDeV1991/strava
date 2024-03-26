@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Bar, Line } from "react-chartjs-2";
+import { Line } from "react-chartjs-2";
 import Chart from "chart.js/auto";
 import { CategoryScale } from "chart.js";
 Chart.register(CategoryScale);
@@ -51,7 +51,7 @@ const VelocityGraph = ({ activityId }) => {
         const accessToken = localStorage.getItem('Strava_access_token');
         const streamTypes = 'time,velocity_smooth';
         const cachedStreams = await fetch(`${process.env.REACT_APP_MONGO_PATH}/mongodb/api/findone/${activityId}`);
-        
+
         let responseData;
         if (cachedStreams.status === 404) {
             console.log("not found")

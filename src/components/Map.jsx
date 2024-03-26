@@ -10,6 +10,9 @@ const Map = ({ activity }) => {
     const [activityName, setActivityName] = useState("loop");
     const [activityDate, setActivityDate] = useState("date");
 
+    console.log(activityName)
+    console.log(activityDate)
+    
     useEffect(() => {
         if (!activity && !activity.polyline) return;
         const decodedCoordinates = decodePolyline(activity.polyline);

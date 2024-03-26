@@ -12,6 +12,9 @@ const ActivitiesPage = () => {
     const [timestamps, setTimestamps] = useState([])
     const [velocitySmoothData, setVelocitySmoothData] = useState([])
 
+    console.log(timestamps)
+    console.log(velocitySmoothData)
+
     const handleScroll = () => {
         setVisibleActivities(prevVisibleActivities => prevVisibleActivities + 5);
     };
