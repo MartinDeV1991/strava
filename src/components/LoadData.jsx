@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 
 const LoadData = ({ accessToken, setActivities }) => {
@@ -40,7 +40,6 @@ const LoadData = ({ accessToken, setActivities }) => {
                     if (data.length === 30 && getAll) {
                         fetchActivities(page + 1);
                     } else {
-                        // displayActivities(allActivities);
                         setActivities(allActivities);
                         saveActivitiesToLocalStorage(allActivities);
                         console.log("saving activities...")
@@ -51,10 +50,14 @@ const LoadData = ({ accessToken, setActivities }) => {
         fetchActivities(1)
     }
 
+    useEffect(() => {
+        getActivitiesFromLocalStorage();
+
+    },[]);
+
     return (
         <div style={{ display: 'flex', alignItems: 'center' }}>
-            <Button id="fetchActivitiesBtn" style={{ margin: '10px 10px' }} onClick={() => getActivities(true)}>Get Activities From API</Button>
-            <Button id="loadActivitiesBtn" style={{ margin: '10px 10px' }} onClick={getActivitiesFromLocalStorage}>Get Activities From LocalStorage</Button>
+            <Button id="fetchActivitiesBtn" style={{ margin: '10px 10px' }} onClick={() => getActivities(true)}>Load newest activities</Button>
         </div>
     );
 };

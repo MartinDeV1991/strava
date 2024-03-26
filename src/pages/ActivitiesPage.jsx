@@ -18,7 +18,6 @@ const ActivitiesPage = () => {
 
     useEffect(() => {
         if (activities !== undefined) {
-
             const filteredActivities = activities.filter(activity => activity.map && activity.map.summary_polyline)
                 .map((activity, index) => ({
                     id: activity.id,
@@ -32,7 +31,6 @@ const ActivitiesPage = () => {
                     key: index
                 }));
             setActivitiesWithOptions(filteredActivities);
-            console.log(activities)
         }
     }, [activities]);
 

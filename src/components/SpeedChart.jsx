@@ -13,7 +13,7 @@ const SpeedChart = ({ speedPerMonth }) => {
         labels: [],
         datasets: [
             {
-                label: 'speed per Month (km)',
+                label: 'Average speed (km/h)',
                 data: [],
             },
         ],
@@ -51,7 +51,7 @@ const SpeedChart = ({ speedPerMonth }) => {
             labels: labels,
             datasets: [
                 {
-                    label: 'speed per Month (km)',
+                    label: 'Average speed (km/h)',
                     data: data,
                     backgroundColor: 'rgba(54, 162, 235, 0.2)',
                     borderColor: 'rgba(54, 162, 235, 1)',
