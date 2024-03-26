@@ -1,6 +1,12 @@
 import React, { useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
 
+function getActivitiesFromLocalStorage(setActivities) {
+    const jsonData = localStorage.getItem('activities');
+    const activities = JSON.parse(jsonData);
+    setActivities(activities);
+}
+
 const LoadData = ({ accessToken, setActivities }) => {
 
     function logData(arg) {
@@ -11,12 +17,6 @@ const LoadData = ({ accessToken, setActivities }) => {
     const saveActivitiesToLocalStorage = (activities) => {
         const jsonData = JSON.stringify(activities);
         localStorage.setItem('activities', jsonData);
-    }
-
-    function getActivitiesFromLocalStorage() {
-        const jsonData = localStorage.getItem('activities');
-        const activities = JSON.parse(jsonData);
-        setActivities(activities);
     }
 
     function getActivities(getAll) {
@@ -51,9 +51,8 @@ const LoadData = ({ accessToken, setActivities }) => {
     }
 
     useEffect(() => {
-        getActivitiesFromLocalStorage();
-
-    },[]);
+        getActivitiesFromLocalStorage(setActivities);
+    }, [setActivities]);
 
     return (
         <div style={{ display: 'flex', alignItems: 'center' }}>

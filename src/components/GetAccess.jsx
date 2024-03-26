@@ -59,8 +59,6 @@ const GetAccess = () => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        console.log('Client ID:', clientId);
-        console.log('Client Secret:', clientSecret);
         exchangeCodeForToken(extractCodeFromUrl())
     };
 

@@ -7,21 +7,12 @@ const Map = ({ activity }) => {
     const [coordinates, setCoordinates] = useState([]);
     const [centerLat, setCenterLat] = useState(null);
     const [centerLng, setCenterLng] = useState(null);
-    const [activityName, setActivityName] = useState("loop");
-    const [activityDate, setActivityDate] = useState("date");
 
-    console.log(activityName)
-    console.log(activityDate)
-    
     useEffect(() => {
         if (!activity && !activity.polyline) return;
         const decodedCoordinates = decodePolyline(activity.polyline);
         setCoordinates(decodedCoordinates);
-        if (activity !== undefined) {
-            setActivityName(activity.name);
-            setActivityDate(activity.date);
-        }
-    }, [activity.polyline]);
+    }, [activity]);
 
     useEffect(() => {
         if (coordinates.length === 0) return;
@@ -76,7 +67,6 @@ const Map = ({ activity }) => {
 
     return (
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            {/* <div>{activityName} {activityDate.slice(0,10)}</div> */}
             {centerLat !== null && centerLng !== null && (
 
                 <MapContainer

@@ -10,6 +10,55 @@ const VelocityGraph = ({ activityId }) => {
     const [velocitySmoothData, setVelocitySmoothData] = useState([])
 
     useEffect(() => {
+        async function getStreams() {
+            // console.log(process.env.REACT_APP_MONGO_PATH)
+            const accessToken = localStorage.getItem('Strava_access_token');
+            const streamTypes = 'time,velocity_smooth';
+            const cachedStreams = await fetch(`${process.env.REACT_APP_MONGO_PATH}/mongodb/api/findone/${activityId}`);
+
+            let responseData;
+            if (cachedStreams.status === 404) {
+                console.log("not found")
+            } else {
+                responseData = await cachedStreams.json();
+                setTimestamps(responseData.timestamps);
+                setVelocitySmoothData(responseData.velocitySmoothData);
+                return;
+            }
+
+            fetch(`https://www.strava.com/api/v3/activities/${activityId}/streams/${streamTypes}`, {
+                method: 'GET',
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                },
+            })
+                .then(response => response.json())
+                .then(data => {
+                    const timeStream = data.find(stream => stream.type === 'time');
+                    const velocitySmoothStream = data.find(stream => stream.type === 'velocity_smooth');
+                    if (timeStream && velocitySmoothStream) {
+                        setTimestamps(timeStream.data);
+                        setVelocitySmoothData(velocitySmoothStream.data);
+                        cachedStreams[activityId] = { timestamps: timeStream.data, velocitySmoothData: velocitySmoothStream.data };
+
+                        fetch(`${process.env.REACT_APP_MONGO_PATH}/mongodb/api/post/${activityId}`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(cachedStreams[activityId])
+                        })
+                            .then(
+                                console.log("posted data")
+                            );
+
+                    }
+                    console.log("getting activity ", activityId, " from API");
+                })
+                .catch(error => {
+                    console.error(`Error fetching velocity_smooth data for activity ${activityId}:`, error);
+                });
+        }
         getStreams();
     }, [activityId]);
 
@@ -45,56 +94,6 @@ const VelocityGraph = ({ activityId }) => {
             ],
         });
     }, [velocitySmoothData, timestamps]);
-
-    async function getStreams() {
-        console.log(process.env.REACT_APP_MONGO_PATH)
-        const accessToken = localStorage.getItem('Strava_access_token');
-        const streamTypes = 'time,velocity_smooth';
-        const cachedStreams = await fetch(`${process.env.REACT_APP_MONGO_PATH}/mongodb/api/findone/${activityId}`);
-
-        let responseData;
-        if (cachedStreams.status === 404) {
-            console.log("not found")
-        } else {
-            responseData = await cachedStreams.json();
-            setTimestamps(responseData.timestamps);
-            setVelocitySmoothData(responseData.velocitySmoothData);
-            return;
-        }
-
-        fetch(`https://www.strava.com/api/v3/activities/${activityId}/streams/${streamTypes}`, {
-            method: 'GET',
-            headers: {
-                Authorization: `Bearer ${accessToken}`,
-            },
-        })
-            .then(response => response.json())
-            .then(data => {
-                const timeStream = data.find(stream => stream.type === 'time');
-                const velocitySmoothStream = data.find(stream => stream.type === 'velocity_smooth');
-                if (timeStream && velocitySmoothStream) {
-                    setTimestamps(timeStream.data);
-                    setVelocitySmoothData(velocitySmoothStream.data);
-                    cachedStreams[activityId] = { timestamps: timeStream.data, velocitySmoothData: velocitySmoothStream.data };
-
-                    fetch(`${process.env.REACT_APP_MONGO_PATH}/mongodb/api/post/${activityId}`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(cachedStreams[activityId])
-                    })
-                        .then(
-                            console.log("posted data")
-                        );
-
-                }
-                console.log("getting activity ", activityId, " from API");
-            })
-            .catch(error => {
-                console.error(`Error fetching velocity_smooth data for activity ${activityId}:`, error);
-            });
-    }
 
     const [chartData, setChartData] = useState({
         labels: [],
