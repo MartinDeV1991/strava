@@ -13,7 +13,7 @@ const GetAccess = () => {
     }
 
     const authorizeStrava = () => {
-        window.location.href = `https://www.strava.com/oauth/authorize?client_id=${clientId}&response_type=code&redirect_uri=http://localhost:3000&approval_prompt=force&scope=activity:read_all`;
+        window.location.href = `https://www.strava.com/oauth/authorize?client_id=${clientId}&response_type=code&redirect_uri=https://gentle-water-0079cc403.5.azurestaticapps.net/&approval_prompt=force&scope=activity:read_all`;
     }
 
     const exchangeCodeForToken = (code) => {
