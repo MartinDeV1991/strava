@@ -61,7 +61,7 @@ const VelocityGraph = ({ activityId }) => {
                 });
         }
         getStreams();
-    }, [activityId]);
+    }, [activityId, userId]);
 
     useEffect(() => {
         const velocity = [];
