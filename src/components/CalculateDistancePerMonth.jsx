@@ -7,8 +7,8 @@ function calculateDistancePerMonth(activities, setDistancePerMonth, setSpeedPerM
 
     if (activities) {
         activities.forEach(activity => {
-            if (activity.type === "Run") {
-                const activityDate = new Date(activity.start_date_local);
+            if (activity.data.type === "Run") {
+                const activityDate = new Date(activity.data.start_date_local);
                 const year = activityDate.getFullYear();
                 const month = activityDate.getMonth() + 1;
 
@@ -17,12 +17,12 @@ function calculateDistancePerMonth(activities, setDistancePerMonth, setSpeedPerM
                 if (!monthlyDistance[key]) {
                     monthlyDistance[key] = 0;
                 }
-                monthlyDistance[key] += activity.distance;
+                monthlyDistance[key] += activity.data.distance;
 
                 if (!timePerMonth[key]) {
                     timePerMonth[key] = 0;
                 }
-                timePerMonth[key] += activity.moving_time;
+                timePerMonth[key] += activity.data.moving_time;
             }
         });
 

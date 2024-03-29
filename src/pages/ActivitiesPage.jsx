@@ -9,31 +9,25 @@ const ActivitiesPage = () => {
     const [visibleActivities, setVisibleActivities] = useState(5);
     const [activitiesWithOptions, setActivitiesWithOptions] = useState([]);
 
-    const [timestamps, setTimestamps] = useState([])
-    const [velocitySmoothData, setVelocitySmoothData] = useState([])
-
-    if (timestamps && velocitySmoothData) {
-        // console.log("timestamps and velocity data is available");
-    }
-
     const handleScroll = () => {
         setVisibleActivities(prevVisibleActivities => prevVisibleActivities + 5);
     };
 
     useEffect(() => {
         if (activities !== undefined) {
-            const filteredActivities = activities.filter(activity => activity.map && activity.map.summary_polyline)
+            const filteredActivities = activities.filter(activity => activity.data && activity.data.map && activity.data.map.summary_polyline)
                 .map((activity, index) => ({
-                    id: activity.id,
-                    date: activity.start_date_local,
-                    name: activity.name,
-                    time: formatTime(activity.moving_time),
-                    distance: (activity.distance / 1000).toFixed(3),
-                    velocity: (activity.distance / activity.moving_time * 3.6).toFixed(2),
-                    elevation: activity.total_elevation_gain,
-                    polyline: activity.map.summary_polyline,
+                    id: activity.data.id,
+                    date: activity.data.start_date_local,
+                    name: activity.data.name,
+                    time: formatTime(activity.data.moving_time),
+                    distance: (activity.data.distance / 1000).toFixed(3),
+                    velocity: (activity.data.distance / activity.data.moving_time * 3.6).toFixed(2),
+                    elevation: activity.data.total_elevation_gain,
+                    polyline: activity.data.map.summary_polyline,
                     key: index
                 }));
+            filteredActivities.sort((a, b) => new Date(b.date) - new Date(a.date));
             setActivitiesWithOptions(filteredActivities);
         }
     }, [activities]);
@@ -67,7 +61,8 @@ const ActivitiesPage = () => {
     return (
         <div>
             {/* {timestamps.length > 1 && <VelocityGraph timestamps={timestamps} velocitySmoothData={velocitySmoothData} />} */}
-            <LoadData setActivities={setActivities} activities={activities} setTimestamps={setTimestamps} setVelocitySmoothData={setVelocitySmoothData}></LoadData>
+            <LoadData setActivities={setActivities} activities={activities}></LoadData>
+            <div>{visibleActivities}</div>
             <InfiniteScroll
                 dataLength={visibleActivities}
                 next={handleScroll}

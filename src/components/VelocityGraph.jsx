@@ -8,13 +8,14 @@ const VelocityGraph = ({ activityId }) => {
 
     const [timestamps, setTimestamps] = useState([])
     const [velocitySmoothData, setVelocitySmoothData] = useState([])
+    let userId = localStorage.getItem('userId');
 
     useEffect(() => {
         async function getStreams() {
             // console.log(process.env.REACT_APP_MONGO_PATH)
             const accessToken = localStorage.getItem('Strava_access_token');
             const streamTypes = 'time,velocity_smooth';
-            const cachedStreams = await fetch(`${process.env.REACT_APP_MONGO_PATH}/mongodb/api/findone/${activityId}`);
+            const cachedStreams = await fetch(`${process.env.REACT_APP_MONGO_PATH}/mongodb/api/findone/${userId}/${activityId}`);
 
             let responseData;
             if (cachedStreams.status === 404) {
@@ -41,7 +42,7 @@ const VelocityGraph = ({ activityId }) => {
                         setVelocitySmoothData(velocitySmoothStream.data);
                         cachedStreams[activityId] = { timestamps: timeStream.data, velocitySmoothData: velocitySmoothStream.data };
 
-                        fetch(`${process.env.REACT_APP_MONGO_PATH}/mongodb/api/post/${activityId}`, {
+                        fetch(`${process.env.REACT_APP_MONGO_PATH}/mongodb/api/post/${userId}/${activityId}`, {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json'
