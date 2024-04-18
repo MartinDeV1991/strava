@@ -28,6 +28,10 @@ const LoadData = ({ accessToken, setActivities }) => {
         let string = `"${argName}":`;
         console.log(string, arg)
     }
+    // logData(userId)
+    if (userId === null) {
+        userId = "default";
+    }
 
     function sendActivitiesToBackend(activities) {
         fetch(`${process.env.REACT_APP_MONGO_PATH}/mongodb/api/post/${userId}/data`, {

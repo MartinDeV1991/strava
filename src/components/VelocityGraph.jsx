@@ -9,6 +9,9 @@ const VelocityGraph = ({ activityId }) => {
     const [timestamps, setTimestamps] = useState([])
     const [velocitySmoothData, setVelocitySmoothData] = useState([])
     let userId = localStorage.getItem('userId');
+    if (userId === null) {
+        userId = "default";
+    }
 
     useEffect(() => {
         async function getStreams() {
