@@ -62,7 +62,7 @@ const ActivitiesPage = () => {
         <div>
             {/* {timestamps.length > 1 && <VelocityGraph timestamps={timestamps} velocitySmoothData={velocitySmoothData} />} */}
             <LoadData setActivities={setActivities} activities={activities}></LoadData>
-            <div>{visibleActivities}</div>
+            {/* <div>{visibleActivities}</div> */}
             <InfiniteScroll
                 dataLength={visibleActivities}
                 next={handleScroll}
