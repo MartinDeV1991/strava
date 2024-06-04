@@ -5,7 +5,7 @@ const HomePage = () => {
 
     const description = (
         <div>
-            For this app you your strava client id and client secret. You can find these in your strava app. Go to 'Settings' and click on 'My API Application'.
+            For this app you need your strava client id and client secret. You can find these in your strava app. Go to 'Settings' and click on 'My API Application'.
             <br />
             <br />
             This will redirect you to the website of strava, where you will be requested to give the app your permission to retrieve data from the Strava API. After clicking on Authorize you will be redirected back to the app.
@@ -18,6 +18,7 @@ const HomePage = () => {
             <br/>
             <br/>
             For users that want to look around in the app without logging in there is a default dataset available. You can skip the login process and continue to the activities and overview pages.
+            This site is hosted on a free tier of Azure. Loading the data can therefor take a minute.
         </div>
     );
     return (
